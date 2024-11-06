@@ -2,6 +2,7 @@ package store.controller;
 
 import java.util.List;
 import store.domain.Products;
+import store.domain.Promotions;
 import store.global.file.ProductFileDto;
 import store.global.constants.FilePath;
 import store.global.file.PromotionFileDto;
@@ -21,5 +22,6 @@ public class StoreController {
         List<ProductFileDto> productDtos = readProductFile.getProductDtos(FilePath.PRODUCTS.getPath());
         Products products = new Products(productDtos);
         List<PromotionFileDto> promotionsDtos = readPromotionFile.getPromotionsDtos(FilePath.PROMOTIONS.getPath());
+        Promotions promotions = new Promotions(promotionsDtos);
     }
 }
