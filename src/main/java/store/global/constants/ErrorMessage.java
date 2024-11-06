@@ -4,6 +4,7 @@ public enum ErrorMessage {
     FILE_NOT_FOUND("파일을 찾을 수 없습니다."),
     FILE_EMPTY("파일이 비어있습니다."),
     BLANK_INPUT("빈 문자열이 입력되었습니다."),
+    INVALID_PRODUCT_DETAIL_COUNT("입력된 상품의 상세 정보 개수가 올바르지 않습니다."),
     EMPTY_NOT_ALLOWED("해당 값이 없거나 공백일 수 없습니다"),
     INVALID_NUMBER("해당 값은 양의 정수여야 합니다.");
 
