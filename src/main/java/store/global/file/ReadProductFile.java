@@ -14,6 +14,14 @@ public class ReadProductFile extends ReadFile {
     private ProductFileDto parseLineToDto(String line) {
         String[] details = line.split(DETAIL_DELIMITER);
         validateDetailsSize(details, DETAIL_COUNT);
-        return new ProductFileDto(details[0], details[1], details[2], details[3]);
+
+        return new ProductFileDto(details[0], details[1], details[2], parsePromotion(details[3]));
+    }
+
+    private String parsePromotion(String promotion) {
+        if (promotion.equals("null")) {
+            return null;
+        }
+        return promotion;
     }
 }
