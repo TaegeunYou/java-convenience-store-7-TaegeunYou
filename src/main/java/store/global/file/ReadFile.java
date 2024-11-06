@@ -13,6 +13,7 @@ public abstract class ReadFile {
     public List<String> getAllLines(String filePath) {
         try {
             List<String> allLines = Files.readAllLines(Paths.get(filePath));
+            allLines.removeFirst();
             validateFileEmpty(allLines);
             return allLines;
         } catch (IOException e) {
