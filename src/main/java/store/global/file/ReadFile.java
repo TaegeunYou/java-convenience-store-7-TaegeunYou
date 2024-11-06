@@ -4,11 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
+import store.dto.ProductFileDto;
 import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
 
-public class ReadFile {
-    public static List<String> getAllLines(String filePath) {
+public abstract class ReadFile {
+
+    public List<String> getAllLines(String filePath) {
         try {
             List<String> allLines = Files.readAllLines(Paths.get(filePath));
             validateFileEmpty(allLines);
@@ -18,7 +20,7 @@ public class ReadFile {
         }
     }
 
-    private static void validateFileEmpty(List<String> allLines) {
+    private void validateFileEmpty(List<String> allLines) {
         if (allLines.isEmpty()) {
             throw CustomException.of(ErrorMessage.FILE_EMPTY);
         }

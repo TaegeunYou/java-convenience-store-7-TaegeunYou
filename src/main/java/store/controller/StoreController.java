@@ -1,10 +1,17 @@
 package store.controller;
 
+import java.util.List;
+import store.dto.ProductFileDto;
 import store.global.constants.FilePath;
-import store.global.file.ReadFile;
+import store.global.file.ReadProductFile;
 
 public class StoreController {
+    private final ReadProductFile readProductFile;
+    public StoreController(ReadProductFile readProductFile) {
+        this.readProductFile = readProductFile;
+    }
+
     public void execute() {
-        ReadFile.getAllLines(FilePath.PRODUCTS.getPath());
+        List<ProductFileDto> productDtos = readProductFile.getProductDtos(FilePath.PRODUCTS.getPath());
     }
 }
