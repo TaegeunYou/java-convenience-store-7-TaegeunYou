@@ -3,9 +3,9 @@ package store.controller;
 import java.util.List;
 import store.domain.Products;
 import store.domain.Promotions;
-import store.global.file.ProductFileDto;
+import store.global.file.dto.ProductFileDto;
 import store.global.constants.FilePath;
-import store.global.file.PromotionFileDto;
+import store.global.file.dto.PromotionFileDto;
 import store.global.file.ReadProductFile;
 import store.global.file.ReadPromotionFile;
 

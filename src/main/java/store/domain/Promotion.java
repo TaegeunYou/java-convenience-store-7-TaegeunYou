@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
-import store.global.file.PromotionFileDto;
+import store.global.file.dto.PromotionFileDto;
 
 public class Promotion {
     private final String name;

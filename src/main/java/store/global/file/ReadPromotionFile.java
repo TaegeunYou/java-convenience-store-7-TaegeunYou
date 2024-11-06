@@ -1,6 +1,7 @@
 package store.global.file;
 
 import java.util.List;
+import store.global.file.dto.PromotionFileDto;
 
 public class ReadPromotionFile extends ReadFile {
     private static final int DETAIL_COUNT = 5;

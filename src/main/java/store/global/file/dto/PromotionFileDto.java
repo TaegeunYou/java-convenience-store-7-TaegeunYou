@@ -1,4 +1,4 @@
-package store.global.file;
+package store.global.file.dto;
 
 public record PromotionFileDto(
         String name,

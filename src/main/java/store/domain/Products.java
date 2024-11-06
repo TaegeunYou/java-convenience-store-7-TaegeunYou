@@ -1,7 +1,7 @@
 package store.domain;
 
 import java.util.List;
-import store.global.file.ProductFileDto;
+import store.global.file.dto.ProductFileDto;
 
 public class Products {
     List<Product> products;

@@ -1,7 +1,7 @@
 package store.domain;
 
 import java.util.List;
-import store.global.file.PromotionFileDto;
+import store.global.file.dto.PromotionFileDto;
 
 public class Promotions {
     List<Promotion> promotions;

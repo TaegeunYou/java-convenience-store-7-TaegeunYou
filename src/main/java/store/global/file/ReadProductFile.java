@@ -1,6 +1,7 @@
 package store.global.file;
 
 import java.util.List;
+import store.global.file.dto.ProductFileDto;
 
 public class ReadProductFile extends ReadFile {
     private static final int DETAIL_COUNT = 4;

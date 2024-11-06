@@ -2,7 +2,7 @@ package store.domain;
 
 import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
-import store.global.file.ProductFileDto;
+import store.global.file.dto.ProductFileDto;
 
 public class Product {
     private final String name;
