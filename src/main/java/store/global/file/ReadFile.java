@@ -8,6 +8,7 @@ import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
 
 public abstract class ReadFile {
+    protected static final String DETAIL_DELIMITER = ",";
 
     public List<String> getAllLines(String filePath) {
         try {
@@ -22,6 +23,12 @@ public abstract class ReadFile {
     private void validateFileEmpty(List<String> allLines) {
         if (allLines.isEmpty()) {
             throw CustomException.of(ErrorMessage.FILE_EMPTY);
+        }
+    }
+
+    protected void validateDetailsSize(String[] details, int detailsSize) {
+        if (details.length != detailsSize) {
+            throw CustomException.of(ErrorMessage.INVALID_INPUT_DETAIL_COUNT);
         }
     }
 }
