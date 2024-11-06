@@ -1,7 +1,6 @@
 package store.global.file;
 
 import java.util.List;
-import store.dto.ProductFileDto;
 
 public class ReadProductFile extends ReadFile {
     private static final String DETAIL_DELIMITER = ",";

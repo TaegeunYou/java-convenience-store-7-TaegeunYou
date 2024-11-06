@@ -1,7 +1,8 @@
 package store.controller;
 
 import java.util.List;
-import store.dto.ProductFileDto;
+import store.domain.Products;
+import store.global.file.ProductFileDto;
 import store.global.constants.FilePath;
 import store.global.file.ReadProductFile;
 
@@ -13,5 +14,6 @@ public class StoreController {
 
     public void execute() {
         List<ProductFileDto> productDtos = readProductFile.getProductDtos(FilePath.PRODUCTS.getPath());
+        Products products = new Products(productDtos);
     }
 }

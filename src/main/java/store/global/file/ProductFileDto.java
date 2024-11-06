@@ -1,4 +1,4 @@
-package store.dto;
+package store.global.file;
 
 public record ProductFileDto(
         String name,
