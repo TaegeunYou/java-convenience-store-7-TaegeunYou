@@ -22,12 +22,21 @@ public class Product {
         validateEmpty(productFileDto.name());
         validateNumber(productFileDto.price());
         validateNumber(productFileDto.quantity());
-        validateEmpty(productFileDto.promotion());
+        validateBlank(productFileDto.promotion());
     }
 
     private void validateEmpty(String str) {
         if (isEmptyOrBlank(str)) {
             throw CustomException.of(ErrorMessage.EMPTY_NOT_ALLOWED);
+        }
+    }
+
+    private void validateBlank(String str) {
+        if (str == null) {
+            return;
+        }
+        if (isBlank(str)) {
+            throw CustomException.of(ErrorMessage.BLANK_NOT_ALLOWED);
         }
     }
 
@@ -39,6 +48,10 @@ public class Product {
 
     private boolean isEmptyOrBlank(String str) {
         return str == null || str.isBlank();
+    }
+
+    private boolean isBlank(String str) {
+        return str.isBlank();
     }
 
     private boolean isNotPositiveInteger(String str) {
