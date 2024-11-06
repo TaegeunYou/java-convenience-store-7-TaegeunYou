@@ -1,7 +1,6 @@
 package store.domain;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
@@ -11,16 +10,16 @@ public class Promotion {
     private final String name;
     private final int buy;
     private final int get;
-    private final String startDate;
-    private final String endDate;
+    private final LocalDate startDate;
+    private final LocalDate endDate;
 
     public Promotion(PromotionFileDto promotionFileDto) {
         validate(promotionFileDto);
         this.name = promotionFileDto.name();
         this.buy = Integer.parseInt(promotionFileDto.buy());
         this.get = Integer.parseInt(promotionFileDto.get());
-        this.startDate = promotionFileDto.startDate();
-        this.endDate = promotionFileDto.endDate();
+        this.startDate = LocalDate.parse(promotionFileDto.startDate());
+        this.endDate = LocalDate.parse(promotionFileDto.endDate());
     }
 
     private void validate(PromotionFileDto promotionFileDto) {
@@ -59,7 +58,7 @@ public class Promotion {
 
     private boolean isNotDateFormat(String str) {
         try {
-            LocalDate.parse(str, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            LocalDate.parse(str);
             return false;
         } catch (DateTimeParseException e) {
             return true;
@@ -78,11 +77,11 @@ public class Promotion {
         return get;
     }
 
-    public String getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public String getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 }
