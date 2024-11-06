@@ -86,6 +86,6 @@ public class ProductTest {
         // when & then
         assertThatThrownBy(() -> new Product(productFileDto))
                 .isInstanceOf(IllegalArgumentException.class)
-                .hasMessage(ErrorMessage.EMPTY_NOT_ALLOWED.getMessage());
+                .hasMessage(ErrorMessage.BLANK_NOT_ALLOWED.getMessage());
     }
 }
