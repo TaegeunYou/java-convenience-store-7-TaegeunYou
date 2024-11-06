@@ -19,28 +19,10 @@ public class Product {
     }
 
     private void validate(ProductFileDto productFileDto) {
-        validateName(productFileDto.name());
-        validatePrice(productFileDto.price());
-        validateQuantity(productFileDto.quantity());
-        validatePromotion(productFileDto.promotion());
-    }
-
-    private void validateName(String name) {
-        validateEmpty(name);
-    }
-
-    private void validatePrice(String price) {
-        validateEmpty(price);
-        validateNumber(price);
-    }
-
-    private void validateQuantity(String quantity) {
-        validateEmpty(quantity);
-        validateNumber(quantity);
-    }
-
-    private void validatePromotion(String promotion) {
-        validateEmpty(promotion);
+        validateEmpty(productFileDto.name());
+        validateNumber(productFileDto.price());
+        validateNumber(productFileDto.quantity());
+        validateEmpty(productFileDto.promotion());
     }
 
     private void validateEmpty(String str) {
