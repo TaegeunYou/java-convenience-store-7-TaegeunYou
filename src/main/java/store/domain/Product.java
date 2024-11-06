@@ -42,7 +42,7 @@ public class Product {
     }
 
     private boolean isNotPositiveInteger(String str) {
-        return !str.matches("\\d+") || Integer.parseInt(str) <= 0;
+        return !str.matches("\\d+") || Integer.parseInt(str) < 0;
     }
 
     public String getName() {

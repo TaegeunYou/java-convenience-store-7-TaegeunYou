@@ -53,7 +53,7 @@ public class Promotion {
     }
 
     private boolean isNotPositiveInteger(String str) {
-        return !str.matches("\\d+") || Integer.parseInt(str) <= 0;
+        return !str.matches("\\d+") || Integer.parseInt(str) < 0;
     }
 
     private boolean isNotDateFormat(String str) {
