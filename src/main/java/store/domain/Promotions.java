@@ -1,8 +1,6 @@
 package store.domain;
 
 import java.util.List;
-import store.global.constants.ErrorMessage;
-import store.global.exception.CustomException;
 import store.global.file.dto.PromotionFileDto;
 
 public class Promotions {
