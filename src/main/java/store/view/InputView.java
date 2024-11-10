@@ -55,6 +55,8 @@ public class InputView {
         while (matcher.find()) {
             String name = matcher.group(1);
             int quantity = Integer.parseInt(matcher.group(2));
+            BuyProductDto buyProduct = new BuyProductDto(name, quantity);
+            validateDuplicateBuyProduct(buyProduct, buyProducts);
             buyProducts.add(new BuyProductDto(name, quantity));
         }
         return buyProducts;
@@ -62,5 +64,15 @@ public class InputView {
 
     private boolean isEmptyOrBlank(String str) {
         return str == null || str.isBlank();
+    }
+
+    private void validateDuplicateBuyProduct(BuyProductDto buyProduct, List<BuyProductDto> buyProducts) {
+        if (isBuyProductDuplicate(buyProduct, buyProducts)) {
+            throw CustomException.of(ErrorMessage.BUY_PRODUCT_DUPLICATE);
+        }
+    }
+
+    private boolean isBuyProductDuplicate(BuyProductDto buyProduct, List<BuyProductDto> buyProducts) {
+        return buyProducts.stream().anyMatch(product -> product.name().equals(buyProduct.name()));
     }
 }
