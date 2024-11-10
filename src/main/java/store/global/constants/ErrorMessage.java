@@ -13,7 +13,8 @@ public enum ErrorMessage {
     BUY_PRODUCT_DUPLICATE("동일한 상품은 하나로 묶어서 다시 입력해 주세요."),
     PRODUCT_NOT_FOUND("존재하지 않는 상품입니다. 다시 입력해 주세요."),
     STOCK_LIMIT_EXCEEDED("재고 수량을 초과하여 구매할 수 없습니다. 다시 입력해 주세요."),
-    NOT_FOUND_PRODUCT("상품 정보를 찾을 수 없습니다");
+    NOT_FOUND_PRODUCT("상품 정보를 찾을 수 없습니다"),
+    INVALID_YES_NO_FORMAT("Y 또는 N으로만 응답해야 합니다.");
 
     private final static String PREFIX = "[ERROR]";
     private final String message;

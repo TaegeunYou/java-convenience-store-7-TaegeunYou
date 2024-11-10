@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import store.domain.BuyProductResult;
 import store.domain.BuyProductsResult;
-import store.domain.Product;
 import store.domain.Products;
 import store.domain.Promotions;
 import store.dto.BuyProductDto;
@@ -42,15 +41,17 @@ public class StoreController {
         while (true) {
             outputView.printProducts(products);
             List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
-            buy(products, buyProducts);
+            BuyProductsResult buyProductsResult = buy(products, buyProducts);
+            buyProductsResult.applyMembership(inputView.requestMembership());
         }
     }
 
-    private void buy(Products products, List<BuyProductDto> buyProductDtos) {
+    private BuyProductsResult buy(Products products, List<BuyProductDto> buyProductDtos) {
         BuyProductsResult buyProductsResult = products.buyProducts(buyProductDtos);
         buyProductsResult = applyPromotionQuantitySufficient(buyProductsResult);
         buyProductsResult = determinePartialPromotion(buyProductsResult);
-        applyPurchaseReduction(buyProductsResult);
+        products.applyPurchaseReduction(buyProductsResult);
+        return buyProductsResult;
     }
 
     private BuyProductsResult applyPromotionQuantitySufficient(BuyProductsResult buyProductsResult) {
@@ -91,20 +92,5 @@ public class StoreController {
             newBuyProductResults.add(buyProductResult);
         }
         return new BuyProductsResult(newBuyProductResults);
-    }
-
-    private void applyPurchaseReduction(BuyProductsResult buyProductsResult) {
-        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
-            Product product = buyProductResult.getProduct();
-            if (product.hasActivePromotion()) {
-                product.minusPromotionStock(buyProductResult.getProductForPromotionStock());
-                product.minusNormalStock(buyProductResult.getProductForNormalStock());
-                continue;
-            }
-            int getProductForNormalStock = Math.min(buyProductResult.getTotalQuantity(), product.getNormalQuantity());
-            int getProductForPromotionStock = buyProductResult.getTotalQuantity() - getProductForNormalStock;
-            product.minusNormalStock(getProductForNormalStock);
-            product.minusPromotionStock(getProductForPromotionStock);
-        }
     }
 }

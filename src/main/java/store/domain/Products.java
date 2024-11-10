@@ -117,4 +117,19 @@ public class Products {
                 .findFirst()
                 .orElseThrow(() -> CustomException.of(ErrorMessage.NOT_FOUND_PRODUCT));
     }
+
+    public void applyPurchaseReduction(BuyProductsResult buyProductsResult) {
+        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
+            Product product = buyProductResult.getProduct();
+            if (product.hasActivePromotion()) {
+                product.minusPromotionStock(buyProductResult.getProductForPromotionStock());
+                product.minusNormalStock(buyProductResult.getProductForNormalStock());
+                continue;
+            }
+            int getProductForNormalStock = Math.min(buyProductResult.getTotalQuantity(), product.getNormalQuantity());
+            int getProductForPromotionStock = buyProductResult.getTotalQuantity() - getProductForNormalStock;
+            product.minusNormalStock(getProductForNormalStock);
+            product.minusPromotionStock(getProductForPromotionStock);
+        }
+    }
 }
