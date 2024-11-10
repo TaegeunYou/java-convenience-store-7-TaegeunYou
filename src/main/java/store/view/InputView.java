@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import store.domain.BuyProductResult;
 import store.domain.Products;
 import store.dto.BuyProductDto;
 import store.global.constants.ErrorMessage;
@@ -31,6 +32,42 @@ public class InputView {
         }
     }
 
+    public boolean requestPromotionQuantitySufficient(BuyProductResult buyProductResult) {
+        while (true) {
+            String str = String.format(
+                    InputMessage.INPUT_PROMOTION_QUANTITY_SUFFICIENT.getMessage(),
+                    buyProductResult.getProduct().getName(),
+                    buyProductResult.getPromotion().getGet()
+            );
+            System.out.println(str);
+            try {
+                boolean isSufficient = enterPromotionQuantitySufficient();
+                System.out.println();
+                return isSufficient;
+            } catch (CustomException e) {
+                System.out.println(e.getMessage() + "\n");
+            }
+        }
+    }
+
+    public boolean requestDetermineFullBuy(BuyProductResult buyProductResult) {
+        while (true) {
+            String str = String.format(
+                    InputMessage.INPUT_DETERMINE_FULL_BUY.getMessage(),
+                    buyProductResult.getProduct().getName(),
+                    buyProductResult.getNonBenefitQuantity()
+            );
+            System.out.println(str);
+            try {
+                boolean isFullBuy = enterDetermineFullBuy();
+                System.out.println();
+                return isFullBuy;
+            } catch (CustomException e) {
+                System.out.println(e.getMessage() + "\n");
+            }
+        }
+    }
+
     public boolean requestMembership() {
         while (true) {
             System.out.println(InputMessage.INPUT_MEMBER_SHIP.getMessage());
@@ -49,6 +86,20 @@ public class InputView {
         validateStringFormat(input);
         validateBuyProductFormat(input);
         return parseBuyProducts(input);
+    }
+
+    private boolean enterPromotionQuantitySufficient() {
+        String input = Console.readLine();
+        validateStringFormat(input);
+        validateMemberShipFormat(input);
+        return parseYesNo(input);
+    }
+
+    private boolean enterDetermineFullBuy() {
+        String input = Console.readLine();
+        validateStringFormat(input);
+        validateMemberShipFormat(input);
+        return parseYesNo(input);
     }
 
     private boolean enterMemberShip() {

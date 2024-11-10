@@ -63,6 +63,11 @@ public class BuyProductResult {
         return getForFree() * (promotion.getBuy() + promotion.getGet());
     }
 
+    //프로모션_해택받지_않는_개수
+    public int getNonBenefitQuantity() {
+        return totalQuantity - getPromotionBenefitQuantity();
+    }
+
     //일반_재고에서_가져올거
     public int getProductForNormalStock() {
         return totalQuantity - getProductForPromotionStock;
