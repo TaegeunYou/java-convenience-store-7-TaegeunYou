@@ -43,7 +43,10 @@ public class BuyProductResult {
     }
 
     //프로모션_재고중에_공짜인거
-    public int getGetForFree() {
+    public int getForFree() {
+        if (!product.hasActivePromotion()) {
+            return 0;
+        }
         return getProductForPromotionStock / (promotion.getBuy() + promotion.getGet());
     }
 
@@ -54,7 +57,10 @@ public class BuyProductResult {
 
     //프로모션_재고에서_해택_받고_가져온거
     public int getPromotionBenefitQuantity() {
-        return getGetForFree() * (promotion.getBuy() + promotion.getGet());
+        if (!product.hasActivePromotion()) {
+            return 0;
+        }
+        return getForFree() * (promotion.getBuy() + promotion.getGet());
     }
 
     //일반_재고에서_가져올거

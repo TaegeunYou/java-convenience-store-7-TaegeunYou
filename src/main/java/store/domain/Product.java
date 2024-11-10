@@ -112,7 +112,6 @@ public class Product {
         return hasPromotion() && promotion.isActive();
     }
 
-
     public void minusPromotionStock(int promotionQuantity) {
         this.promotionQuantity -= promotionQuantity;
     }
