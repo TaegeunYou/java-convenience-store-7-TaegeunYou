@@ -20,78 +20,97 @@ public class InputView {
 
     public List<BuyProductDto> requestBuyProducts(Products products) {
         while (true) {
-            System.out.println(InputMessage.INPUT_BUY_PRODUCT.getMessage());
             try {
-                List<BuyProductDto> buyProducts = enterBuyProduct();
-                products.validateBuyProduct(buyProducts);
-                System.out.println();
-                return buyProducts;
+                return handleBuyProductRequest(products);
             } catch (CustomException e) {
-                System.out.println(e.getMessage() + "\n");
+                printErrorMessage(e);
             }
         }
     }
 
     public boolean requestPromotionQuantitySufficient(BuyProductResult buyProductResult) {
         while (true) {
-            String str = String.format(
-                    InputMessage.INPUT_PROMOTION_QUANTITY_SUFFICIENT.getMessage(),
-                    buyProductResult.getProduct().getName(),
-                    buyProductResult.getPromotion().getGet()
-            );
-            System.out.println(str);
             try {
-                boolean isSufficient = enterPromotionQuantitySufficient();
-                System.out.println();
-                return isSufficient;
+                return handlePromotionQuantitySufficientRequest(buyProductResult);
             } catch (CustomException e) {
-                System.out.println(e.getMessage() + "\n");
+                printErrorMessage(e);
             }
         }
     }
 
     public boolean requestDetermineFullBuy(BuyProductResult buyProductResult) {
         while (true) {
-            String str = String.format(
-                    InputMessage.INPUT_DETERMINE_FULL_BUY.getMessage(),
-                    buyProductResult.getProduct().getName(),
-                    buyProductResult.getNonBenefitQuantity()
-            );
-            System.out.println(str);
             try {
-                boolean isFullBuy = enterDetermineFullBuy();
-                System.out.println();
-                return isFullBuy;
+                return handleDetermineFullBuyRequest(buyProductResult);
             } catch (CustomException e) {
-                System.out.println(e.getMessage() + "\n");
+                printErrorMessage(e);
             }
         }
     }
 
     public boolean requestMembership() {
         while (true) {
-            System.out.println(InputMessage.INPUT_MEMBER_SHIP.getMessage());
             try {
-                boolean memberShip = enterMemberShip();
-                System.out.println();
-                return memberShip;
+                return handleMembershipRequest();
             } catch (CustomException e) {
-                System.out.println(e.getMessage() + "\n");
+                printErrorMessage(e);
             }
         }
     }
 
     public boolean requestAdditionalBuy() {
         while (true) {
-            System.out.println(InputMessage.INPUT_ADDITIONAL_BUY.getMessage());
             try {
-                boolean isAdditionalBuy = enterAdditionalBuy();
-                System.out.println();
-                return isAdditionalBuy;
+                return handleAdditionalBuyRequest();
             } catch (CustomException e) {
-                System.out.println(e.getMessage() + "\n");
+                printErrorMessage(e);
             }
         }
+    }
+
+    private List<BuyProductDto> handleBuyProductRequest(Products products) {
+        System.out.println(InputMessage.INPUT_BUY_PRODUCT.getMessage());
+        List<BuyProductDto> buyProducts = enterBuyProduct();
+        products.validateBuyProduct(buyProducts);
+        System.out.println();
+        return buyProducts;
+    }
+
+    private boolean handlePromotionQuantitySufficientRequest(BuyProductResult buyProductResult) {
+        String message = String.format(
+                InputMessage.INPUT_PROMOTION_QUANTITY_SUFFICIENT.getMessage(),
+                buyProductResult.getProduct().getName(), buyProductResult.getPromotion().getGet()
+        );
+        System.out.println(message);
+        boolean isSufficient = enterPromotionQuantitySufficient();
+        System.out.println();
+        return isSufficient;
+    }
+
+    private boolean handleDetermineFullBuyRequest(BuyProductResult buyProductResult) {
+        String message = String.format(
+                InputMessage.INPUT_DETERMINE_FULL_BUY.getMessage(),
+                buyProductResult.getProduct().getName(),
+                buyProductResult.getNonBenefitQuantity()
+        );
+        System.out.println(message);
+        boolean isFullBuy = enterDetermineFullBuy();
+        System.out.println();
+        return isFullBuy;
+    }
+
+    private boolean handleMembershipRequest() {
+        System.out.println(InputMessage.INPUT_MEMBER_SHIP.getMessage());
+        boolean memberShip = enterMemberShip();
+        System.out.println();
+        return memberShip;
+    }
+
+    private boolean handleAdditionalBuyRequest() {
+        System.out.println(InputMessage.INPUT_ADDITIONAL_BUY.getMessage());
+        boolean isAdditionalBuy = enterAdditionalBuy();
+        System.out.println();
+        return isAdditionalBuy;
     }
 
     private List<BuyProductDto> enterBuyProduct() {
@@ -155,13 +174,21 @@ public class InputView {
         List<BuyProductDto> buyProducts = new ArrayList<>();
         Matcher matcher = Pattern.compile(BUY_PRODUCT_PARSE_FORMAT_REGEX).matcher(input);
         while (matcher.find()) {
-            String name = matcher.group(1);
-            int quantity = Integer.parseInt(matcher.group(2));
-            BuyProductDto buyProduct = new BuyProductDto(name, quantity);
-            validateDuplicateBuyProduct(buyProduct, buyProducts);
-            buyProducts.add(new BuyProductDto(name, quantity));
+            BuyProductDto buyProduct = createBuyProduct(matcher);
+            validateAndAddProduct(buyProduct, buyProducts);
         }
         return buyProducts;
+    }
+
+    private BuyProductDto createBuyProduct(Matcher matcher) {
+        String name = matcher.group(1);
+        int quantity = Integer.parseInt(matcher.group(2));
+        return new BuyProductDto(name, quantity);
+    }
+
+    private void validateAndAddProduct(BuyProductDto buyProduct, List<BuyProductDto> buyProducts) {
+        validateDuplicateBuyProduct(buyProduct, buyProducts);
+        buyProducts.add(buyProduct);
     }
 
     private boolean isEmptyOrBlank(String str) {
@@ -176,5 +203,9 @@ public class InputView {
 
     private boolean isBuyProductDuplicate(BuyProductDto buyProduct, List<BuyProductDto> buyProducts) {
         return buyProducts.stream().anyMatch(product -> product.name().equals(buyProduct.name()));
+    }
+
+    private void printErrorMessage(CustomException exception) {
+        System.out.println(exception.getMessage() + "\n");
     }
 }
