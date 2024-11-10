@@ -31,6 +31,7 @@ public class OutputView {
             );
             System.out.println(str);
         }
+        System.out.println();
     }
 
     private String getProductQuantityPrintFormat(int quantity) {
