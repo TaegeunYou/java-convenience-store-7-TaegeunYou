@@ -8,19 +8,36 @@ import store.global.file.dto.ProductFileDto;
 public class Product {
     private final String name;
     private final int price;
-    private final int quantity;
+    private final int normalQuantity;
     private final Promotion promotion;
+    private final int promotionQuantity;
 
-    public Product(ProductFileDto productFileDto) {
-        this(productFileDto, null);
+    public Product(ProductFileDto normalProductDto) {
+        validate(normalProductDto);
+        this.name = normalProductDto.name();
+        this.price = Integer.parseInt(normalProductDto.price());
+        this.normalQuantity = Integer.parseInt(normalProductDto.quantity());
+        this.promotion = null;
+        this.promotionQuantity = 0;
     }
 
-    public Product(ProductFileDto productFileDto, Promotion promotion) {
-        validate(productFileDto);
-        this.name = productFileDto.name();
-        this.price = Integer.parseInt(productFileDto.price());
-        this.quantity = Integer.parseInt(productFileDto.quantity());
+    public Product(ProductFileDto promotionProductDto, Promotion promotion) {
+        validate(promotionProductDto);
+        this.name = promotionProductDto.name();
+        this.price = Integer.parseInt(promotionProductDto.price());
+        this.normalQuantity = 0;
         this.promotion = promotion;
+        this.promotionQuantity = Integer.parseInt(promotionProductDto.quantity());
+    }
+
+    public Product(ProductFileDto normalProductDto, ProductFileDto promotionProductDto, Promotion promotion) {
+        validate(normalProductDto);
+        validate(promotionProductDto);
+        this.name = normalProductDto.name();
+        this.price = Integer.parseInt(normalProductDto.price());
+        this.normalQuantity = Integer.parseInt(normalProductDto.quantity());
+        this.promotion = promotion;
+        this.promotionQuantity = Integer.parseInt(promotionProductDto.quantity());
     }
 
     public boolean isSame(BuyProductDto buyProducts) {
@@ -75,11 +92,15 @@ public class Product {
         return price;
     }
 
-    public int getQuantity() {
-        return quantity;
+    public int getNormalQuantity() {
+        return normalQuantity;
     }
 
     public Promotion getPromotion() {
         return promotion;
+    }
+
+    public int getPromotionQuantity() {
+        return promotionQuantity;
     }
 }

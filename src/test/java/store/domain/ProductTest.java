@@ -33,7 +33,7 @@ public class ProductTest {
         // then
         assertThat(product.getName()).isEqualTo(name);
         assertThat(product.getPrice()).isEqualTo(Integer.parseInt(price));
-        assertThat(product.getQuantity()).isEqualTo(Integer.parseInt(quantity));
+        assertThat(product.getNormalQuantity()).isEqualTo(Integer.parseInt(quantity));
         assertThat(product.getPromotion()).isEqualTo(promotion);
     }
 
