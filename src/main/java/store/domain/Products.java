@@ -95,20 +95,36 @@ public class Products {
         List<BuyProductResult> buyProductResults = new ArrayList<>();
         for (BuyProductDto buyProductDto : buyProductDtos) {
             Product product = findProduct(buyProductDto);
-            if (product.hasActivePromotion()) {
-                int getProductForPromotionStock = Math.min(buyProductDto.quantity(), product.getPromotionQuantity());
-                BuyProductResult buyProductResult = new BuyProductResult(
-                        product.getPromotion(), getProductForPromotionStock,
-                        buyProductDto.quantity(), product);
-                buyProductResults.add(buyProductResult);
-                continue;
-            }
-            BuyProductResult buyProductResult = new BuyProductResult(
-                    product.getPromotion(), 0, buyProductDto.quantity(), product
-            );
+            BuyProductResult buyProductResult = createBuyProductResult(buyProductDto, product);
             buyProductResults.add(buyProductResult);
         }
         return new BuyProductsResult(buyProductResults);
+    }
+
+    private BuyProductResult createBuyProductResult(BuyProductDto buyProductDto, Product product) {
+        if (product.hasActivePromotion()) {
+            return createBuyProductResultWithPromotion(buyProductDto, product);
+        }
+        return createBuyProductResultWithoutPromotion(buyProductDto, product);
+    }
+
+    private BuyProductResult createBuyProductResultWithPromotion(BuyProductDto buyProductDto, Product product) {
+        int getProductForPromotionStock = Math.min(buyProductDto.quantity(), product.getPromotionQuantity());
+        return new BuyProductResult(
+                product.getPromotion(),
+                getProductForPromotionStock,
+                buyProductDto.quantity(),
+                product
+        );
+    }
+
+    private BuyProductResult createBuyProductResultWithoutPromotion(BuyProductDto buyProductDto, Product product) {
+        return new BuyProductResult(
+                product.getPromotion(),
+                0,
+                buyProductDto.quantity(),
+                product
+        );
     }
 
     private Product findProduct(BuyProductDto buyProductDto) {
@@ -122,14 +138,22 @@ public class Products {
         for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
             Product product = buyProductResult.getProduct();
             if (product.hasActivePromotion()) {
-                product.minusPromotionStock(buyProductResult.getProductForPromotionStock());
-                product.minusNormalStock(buyProductResult.getProductForNormalStock());
+                applyReductionForProductWithPromotion(product, buyProductResult);
                 continue;
             }
-            int getProductForNormalStock = Math.min(buyProductResult.getTotalQuantity(), product.getNormalQuantity());
-            int getProductForPromotionStock = buyProductResult.getTotalQuantity() - getProductForNormalStock;
-            product.minusNormalStock(getProductForNormalStock);
-            product.minusPromotionStock(getProductForPromotionStock);
+            applyReductionForProductWithoutPromotion(product, buyProductResult);
         }
+    }
+
+    private void applyReductionForProductWithPromotion(Product product, BuyProductResult buyProductResult) {
+        product.minusPromotionStock(buyProductResult.getProductForPromotionStock());
+        product.minusNormalStock(buyProductResult.getProductForNormalStock());
+    }
+
+    private void applyReductionForProductWithoutPromotion(Product product, BuyProductResult buyProductResult) {
+        int getProductForNormalStock = Math.min(buyProductResult.getTotalQuantity(), product.getNormalQuantity());
+        int getProductForPromotionStock = buyProductResult.getTotalQuantity() - getProductForNormalStock;
+        product.minusNormalStock(getProductForNormalStock);
+        product.minusPromotionStock(getProductForPromotionStock);
     }
 }
