@@ -1,6 +1,11 @@
 package store.controller;
 
+import camp.nextstep.edu.missionutils.Console;
+import java.util.ArrayList;
 import java.util.List;
+import store.domain.BuyProductResult;
+import store.domain.BuyProductsResult;
+import store.domain.Product;
 import store.domain.Products;
 import store.domain.Promotions;
 import store.dto.BuyProductDto;
@@ -36,13 +41,70 @@ public class StoreController {
 
         while (true) {
             outputView.printProducts(products);
-
             List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
             buy(products, buyProducts);
         }
     }
 
     private void buy(Products products, List<BuyProductDto> buyProductDtos) {
-        products.buyProducts(buyProductDtos);
+        BuyProductsResult buyProductsResult = products.buyProducts(buyProductDtos);
+        buyProductsResult = applyPromotionQuantitySufficient(buyProductsResult);
+        buyProductsResult = determinePartialPromotion(buyProductsResult);
+        applyPurchaseReduction(buyProductsResult);
+    }
+
+    private BuyProductsResult applyPromotionQuantitySufficient(BuyProductsResult buyProductsResult) {
+        List<BuyProductResult> newBuyProductResults = new ArrayList<>();
+        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
+            if (buyProductResult.isPromotionQuantityInsufficient()) {
+                System.out.println("해택 받아서 더 가져올거야?");
+                if (Console.readLine().equals("Y")) {
+                    int getMoreProduct = buyProductResult.getPromotion().getGet();
+                    BuyProductResult newBuyProductResult = new BuyProductResult(
+                            buyProductResult,
+                            buyProductResult.getProductForPromotionStock() + getMoreProduct,
+                            buyProductResult.getTotalQuantity() + getMoreProduct
+                    );
+                    newBuyProductResults.add(newBuyProductResult);
+                    continue;
+                }
+            }
+            newBuyProductResults.add(buyProductResult);
+        }
+        return new BuyProductsResult(newBuyProductResults);
+    }
+
+    private BuyProductsResult determinePartialPromotion(BuyProductsResult buyProductsResult) {
+        List<BuyProductResult> newBuyProductResults = new ArrayList<>();
+        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
+            if (buyProductResult.isPartialPromotionApplicable()) {
+                System.out.println("해택 안받은거 있는데 그래도 구매할거야?");
+                if (Console.readLine().equals("N")) {
+                    BuyProductResult newBuyProductResult = new BuyProductResult(
+                            buyProductResult,
+                            buyProductResult.getPromotionBenefitQuantity(),
+                            buyProductResult.getPromotionBenefitQuantity()
+                    );
+                    newBuyProductResults.add(newBuyProductResult);
+                }
+            }
+            newBuyProductResults.add(buyProductResult);
+        }
+        return new BuyProductsResult(newBuyProductResults);
+    }
+
+    private void applyPurchaseReduction(BuyProductsResult buyProductsResult) {
+        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
+            Product product = buyProductResult.getProduct();
+            if (product.hasActivePromotion()) {
+                product.minusPromotionStock(buyProductResult.getProductForPromotionStock());
+                product.minusNormalStock(buyProductResult.getProductForNormalStock());
+                continue;
+            }
+            int getProductForNormalStock = Math.min(buyProductResult.getTotalQuantity(), product.getNormalQuantity());
+            int getProductForPromotionStock = buyProductResult.getTotalQuantity() - getProductForNormalStock;
+            product.minusNormalStock(getProductForNormalStock);
+            product.minusPromotionStock(getProductForPromotionStock);
+        }
     }
 }

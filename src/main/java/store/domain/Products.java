@@ -1,6 +1,5 @@
 package store.domain;
 
-import camp.nextstep.edu.missionutils.Console;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -92,52 +91,24 @@ public class Products {
         return Collections.unmodifiableList(products);
     }
 
-    public void buyProducts(List<BuyProductDto> buyProducts) {
-        for (BuyProductDto buyProductDto : buyProducts) {
+    public BuyProductsResult buyProducts(List<BuyProductDto> buyProductDtos) {
+        List<BuyProductResult> buyProductResults = new ArrayList<>();
+        for (BuyProductDto buyProductDto : buyProductDtos) {
             Product product = findProduct(buyProductDto);
             if (product.hasActivePromotion()) {
-                //프로모션 재고부터 소모하고 일반 재고에서 소모
-                Promotion promotion = product.getPromotion();
-
-                //프로모션_재고에서_가져올거
                 int getProductForPromotionStock = Math.min(buyProductDto.quantity(), product.getPromotionQuantity());
-
-                //프로모션_재고중에_공짜인거
-                int getForFree = getProductForPromotionStock / (promotion.getBuy() + promotion.getGet());
-
-                //차감하고_남은_프로모션_재고
-                int remainPromotionStock = product.getPromotionQuantity() - getProductForPromotionStock;
-
-                //프로모션_재고에서_해택_받고_가져온거
-                int promotionBenefitQuantity = getForFree * (promotion.getBuy() + promotion.getGet());
-
-                //일반_재고에서_가져올거
-                int getProductForNormalStock = buyProductDto.quantity() - getProductForPromotionStock;
-
-                if (getProductForPromotionStock - promotionBenefitQuantity >= promotion.getBuy() && remainPromotionStock >= promotion.getGet()) {
-                    System.out.println("해택 받아서 더 가져올거야?");
-                    if (Console.readLine().equals("Y")) {
-                        getProductForPromotionStock += promotion.getGet();
-                        promotionBenefitQuantity += promotion.getGet();
-                    }
-                }
-
-                if (promotionBenefitQuantity != buyProductDto.quantity()) {
-                    System.out.println("해택 안받은거 있는데 그래도 구매할거야?");
-                    if (Console.readLine().equals("N")) {
-                        product.minusPromotionStock(promotionBenefitQuantity);
-                        continue;
-                    }
-                }
-                product.minusPromotionStock(getProductForPromotionStock);
-                product.minusNormalStock(getProductForNormalStock);
+                BuyProductResult buyProductResult = new BuyProductResult(
+                        product.getPromotion(), getProductForPromotionStock,
+                        buyProductDto.quantity(), product);
+                buyProductResults.add(buyProductResult);
                 continue;
             }
-            int getProductForNormalStock = Math.min(buyProductDto.quantity(), product.getNormalQuantity());
-            int getProductForPromotionStock = buyProductDto.quantity() - getProductForNormalStock;
-            product.minusNormalStock(getProductForNormalStock);
-            product.minusPromotionStock(getProductForPromotionStock);
+            BuyProductResult buyProductResult = new BuyProductResult(
+                    product.getPromotion(), 0, buyProductDto.quantity(), product
+            );
+            buyProductResults.add(buyProductResult);
         }
+        return new BuyProductsResult(buyProductResults);
     }
 
     private Product findProduct(BuyProductDto buyProductDto) {
