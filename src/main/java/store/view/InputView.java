@@ -90,8 +90,7 @@ public class InputView {
     private boolean handleDetermineFullBuyRequest(BuyProductResult buyProductResult) {
         String message = String.format(
                 InputMessage.INPUT_DETERMINE_FULL_BUY.getMessage(),
-                buyProductResult.getProduct().getName(),
-                buyProductResult.getNonBenefitQuantity()
+                buyProductResult.getProduct().getName(), buyProductResult.getNonBenefitQuantity()
         );
         System.out.println(message);
         boolean isFullBuy = enterDetermineFullBuy();
