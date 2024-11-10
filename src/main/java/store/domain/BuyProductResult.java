@@ -80,4 +80,27 @@ public class BuyProductResult {
     public int getTotalPrice() {
         return totalQuantity * product.getPrice();
     }
+
+    public BuyProductResult applyPromotionIfSufficient(boolean isPromotionSufficient) {
+        if (isPromotionSufficient) {
+            int getMoreQuantity = getPromotion().getGet();
+            return new BuyProductResult(
+                    this,
+                    getProductForPromotionStock() + getMoreQuantity,
+                    getTotalQuantity() + getMoreQuantity
+            );
+        }
+        return this;
+    }
+
+    public BuyProductResult applyPartialPromotion(boolean isFullBuy) {
+        if (!isFullBuy) {
+            return new BuyProductResult(
+                    this,
+                    getPromotionBenefitQuantity(),
+                    getPromotionBenefitQuantity()
+            );
+        }
+        return this;
+    }
 }
