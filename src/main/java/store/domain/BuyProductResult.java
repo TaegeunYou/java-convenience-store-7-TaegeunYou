@@ -76,4 +76,8 @@ public class BuyProductResult {
     public int getTotalQuantity() {
         return totalQuantity;
     }
+
+    public int getTotalPrice() {
+        return totalQuantity * product.getPrice();
+    }
 }

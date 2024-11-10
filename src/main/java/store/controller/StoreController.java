@@ -1,6 +1,5 @@
 package store.controller;
 
-import camp.nextstep.edu.missionutils.Console;
 import java.util.ArrayList;
 import java.util.List;
 import store.domain.BuyProductResult;
@@ -43,6 +42,7 @@ public class StoreController {
             List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
             BuyProductsResult buyProductsResult = buy(products, buyProducts);
             buyProductsResult.applyMembership(inputView.requestMembership());
+            outputView.printBuyProductsResult(buyProductsResult);
         }
     }
 
@@ -58,13 +58,12 @@ public class StoreController {
         List<BuyProductResult> newBuyProductResults = new ArrayList<>();
         for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
             if (buyProductResult.isPromotionQuantityInsufficient()) {
-                System.out.println("해택 받아서 더 가져올거야?");
-                if (Console.readLine().equals("Y")) {
-                    int getMoreProduct = buyProductResult.getPromotion().getGet();
+                if (inputView.requestPromotionQuantitySufficient(buyProductResult)) {
+                    int getMoreQuantity = buyProductResult.getPromotion().getGet();
                     BuyProductResult newBuyProductResult = new BuyProductResult(
                             buyProductResult,
-                            buyProductResult.getProductForPromotionStock() + getMoreProduct,
-                            buyProductResult.getTotalQuantity() + getMoreProduct
+                            buyProductResult.getProductForPromotionStock() + getMoreQuantity,
+                            buyProductResult.getTotalQuantity() + getMoreQuantity
                     );
                     newBuyProductResults.add(newBuyProductResult);
                     continue;
@@ -79,8 +78,7 @@ public class StoreController {
         List<BuyProductResult> newBuyProductResults = new ArrayList<>();
         for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
             if (buyProductResult.isPartialPromotionApplicable()) {
-                System.out.println("해택 안받은거 있는데 그래도 구매할거야?");
-                if (Console.readLine().equals("N")) {
+                if (!inputView.requestDetermineFullBuy(buyProductResult)) {
                     BuyProductResult newBuyProductResult = new BuyProductResult(
                             buyProductResult,
                             buyProductResult.getPromotionBenefitQuantity(),

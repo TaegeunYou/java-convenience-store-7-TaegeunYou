@@ -1,23 +1,13 @@
 package store.view;
 
+import store.domain.BuyProductResult;
+import store.domain.BuyProductsResult;
 import store.domain.Product;
 import store.domain.Products;
 
 public class OutputView {
     private static final String PRODUCT_NORMAL_FORMAT = "- %s %s원 %s";
     private static final String PRODUCT_PROMOTION_FORMAT = "- %s %s원 %s %s";
-
-    public void printlnMessage(String message) {
-        System.out.println(message);
-    }
-
-    public void printEmptyLine() {
-        System.out.println();
-    }
-
-    public void printlnMessageWithEmptyLine(String message) {
-        printlnMessage(message + "\n");
-    }
 
     public void printProducts(Products products) {
         System.out.println("안녕하세요. W편의점입니다.");
@@ -37,7 +27,7 @@ public class OutputView {
 
     private void printPromotionProduct(Product product) {
         String str = String.format(PRODUCT_PROMOTION_FORMAT, product.getName(),
-                getProductPriceFormat(product.getPrice()),
+                getPriceFormat(product.getPrice()),
                 getProductQuantityPrintFormat(product.getPromotionQuantity()),
                 product.getPromotion().getName()
         );
@@ -46,13 +36,13 @@ public class OutputView {
 
     private void printNormalProduct(Product product) {
         String str = String.format(PRODUCT_NORMAL_FORMAT, product.getName(),
-                getProductPriceFormat(product.getPrice()),
+                getPriceFormat(product.getPrice()),
                 getProductQuantityPrintFormat(product.getNormalQuantity())
         );
         System.out.println(str);
     }
 
-    private String getProductPriceFormat(int price) {
+    private String getPriceFormat(int price) {
         return String.format("%,d", price);
     }
 
@@ -61,5 +51,40 @@ public class OutputView {
             return "재고 없음";
         }
         return quantity + "개";
+    }
+
+    public void printBuyProductsResult(BuyProductsResult buyProductsResult) {
+        System.out.println("==============W 편의점================");
+        System.out.println("상품명 수량 금액");
+        printBuyProduct(buyProductsResult);
+        System.out.println("=============증정===============");
+        printBuyProductFree(buyProductsResult);
+        System.out.println("====================================");
+        printResult(buyProductsResult);
+        System.out.println();
+    }
+
+    private void printBuyProduct(BuyProductsResult buyProductsResult) {
+        for (BuyProductResult buyProduct : buyProductsResult.getBuyProducts()) {
+            Product product = buyProduct.getProduct();
+            System.out.println(product.getName() + " " + buyProduct.getTotalQuantity() + " " + getPriceFormat(
+                    buyProduct.getTotalPrice()));
+        }
+    }
+
+    private void printBuyProductFree(BuyProductsResult buyProductsResult) {
+        for (BuyProductResult buyProduct : buyProductsResult.getBuyProducts()) {
+            if (buyProduct.getForFree() != 0) {
+                System.out.println(buyProduct.getProduct().getName() + " " + buyProduct.getForFree());
+            }
+        }
+    }
+
+    private void printResult(BuyProductsResult buyProductsResult) {
+        System.out.println("총구매액 " + buyProductsResult.getTotalQuantity() + " " + getPriceFormat(
+                buyProductsResult.getTotalPrice()));
+        System.out.println("행사할인 -" + getPriceFormat(buyProductsResult.getPermissionDiscountPrice()));
+        System.out.println("멤버십할인 -" + getPriceFormat(buyProductsResult.getMembershipDiscountPrice()));
+        System.out.println("내실돈 " + getPriceFormat(buyProductsResult.getTotalPay()));
     }
 }

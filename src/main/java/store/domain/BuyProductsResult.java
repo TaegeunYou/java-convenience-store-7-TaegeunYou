@@ -30,4 +30,22 @@ public class BuyProductsResult {
         int discountPrice = totalPrice * MEMBERSHIP_DISCOUNT_PERCENTAGE / 100;
         return Math.min(discountPrice, MAX_MEMBERSHIP_DISCOUNT_PRICE);
     }
+
+    public int getTotalPrice() {
+        return buyProductResults.stream().mapToInt(BuyProductResult::getTotalPrice).sum();
+    }
+
+    public int getTotalQuantity() {
+        return buyProductResults.stream().mapToInt(BuyProductResult::getTotalQuantity).sum();
+    }
+
+    public int getPermissionDiscountPrice() {
+        return buyProductResults.stream().mapToInt(
+                buyProductResult -> buyProductResult.getForFree() * buyProductResult.getProduct().getPrice()
+        ).sum();
+    }
+
+    public int getTotalPay() {
+        return getTotalPrice() - getPermissionDiscountPrice() - getMembershipDiscountPrice();
+    }
 }
