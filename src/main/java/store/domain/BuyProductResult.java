@@ -80,8 +80,8 @@ public class BuyProductResult {
         if (isPromotionSufficient) {
             int getMoreQuantity = getPromotion().getGet();
             return new BuyProductResult(
-                    this, getProductForPromotionStock() + getMoreQuantity,
-                    getTotalQuantity() + getMoreQuantity
+                    this, getProductForPromotionStock + getMoreQuantity,
+                    totalQuantity + getMoreQuantity
             );
         }
         return this;
