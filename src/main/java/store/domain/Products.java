@@ -21,6 +21,36 @@ public class Products {
         this.products = generateProducts(productDtoMap, promotions);
     }
 
+    public void validateBuyProduct(List<BuyProductDto> buyProducts) {
+        for (BuyProductDto buyProduct : buyProducts) {
+            List<Product> matchedProducts = products.stream()
+                    .filter(product -> product.isSame(buyProduct)).toList();
+            validateProductExist(matchedProducts);
+            validateStock(matchedProducts, buyProduct);
+        }
+    }
+
+    public void applyPurchaseReduction(BuyProductsResult buyProductsResult) {
+        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
+            Product product = buyProductResult.getProduct();
+            if (product.hasActivePromotion()) {
+                applyReductionForProductWithPromotion(product, buyProductResult);
+                continue;
+            }
+            applyReductionForProductWithoutPromotion(product, buyProductResult);
+        }
+    }
+
+    public BuyProductsResult buyProducts(List<BuyProductDto> buyProductDtos) {
+        List<BuyProductResult> buyProductResults = new ArrayList<>();
+        for (BuyProductDto buyProductDto : buyProductDtos) {
+            Product product = findProduct(buyProductDto);
+            BuyProductResult buyProductResult = createBuyProductResult(buyProductDto, product);
+            buyProductResults.add(buyProductResult);
+        }
+        return new BuyProductsResult(buyProductResults);
+    }
+
     private List<Product> generateProducts(Map<String, List<ProductFileDto>> productDtoMap, Promotions promotions) {
         ArrayList<Product> products = new ArrayList<>();
         for (Map.Entry<String, List<ProductFileDto>> entry : productDtoMap.entrySet()) {
@@ -63,15 +93,6 @@ public class Products {
                 .orElse(null);
     }
 
-    public void validateBuyProduct(List<BuyProductDto> buyProducts) {
-        for (BuyProductDto buyProduct : buyProducts) {
-            List<Product> matchedProducts = products.stream()
-                    .filter(product -> product.isSame(buyProduct)).toList();
-            validateProductExist(matchedProducts);
-            validateStock(matchedProducts, buyProduct);
-        }
-    }
-
     private void validateProductExist(List<Product> matchedProducts) {
         if (matchedProducts.isEmpty()) {
             throw CustomException.of(ErrorMessage.PRODUCT_NOT_EXIST);
@@ -85,20 +106,6 @@ public class Products {
         if (stock < buyProduct.quantity()) {
             throw CustomException.of(ErrorMessage.STOCK_LIMIT_EXCEEDED);
         }
-    }
-
-    public List<Product> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
-
-    public BuyProductsResult buyProducts(List<BuyProductDto> buyProductDtos) {
-        List<BuyProductResult> buyProductResults = new ArrayList<>();
-        for (BuyProductDto buyProductDto : buyProductDtos) {
-            Product product = findProduct(buyProductDto);
-            BuyProductResult buyProductResult = createBuyProductResult(buyProductDto, product);
-            buyProductResults.add(buyProductResult);
-        }
-        return new BuyProductsResult(buyProductResults);
     }
 
     private BuyProductResult createBuyProductResult(BuyProductDto buyProductDto, Product product) {
@@ -134,17 +141,6 @@ public class Products {
                 .orElseThrow(() -> CustomException.of(ErrorMessage.NOT_FOUND_PRODUCT));
     }
 
-    public void applyPurchaseReduction(BuyProductsResult buyProductsResult) {
-        for (BuyProductResult buyProductResult : buyProductsResult.getBuyProducts()) {
-            Product product = buyProductResult.getProduct();
-            if (product.hasActivePromotion()) {
-                applyReductionForProductWithPromotion(product, buyProductResult);
-                continue;
-            }
-            applyReductionForProductWithoutPromotion(product, buyProductResult);
-        }
-    }
-
     private void applyReductionForProductWithPromotion(Product product, BuyProductResult buyProductResult) {
         product.minusPromotionStock(buyProductResult.getProductForPromotionStock());
         product.minusNormalStock(buyProductResult.getProductForNormalStock());
@@ -155,5 +151,9 @@ public class Products {
         int getProductForPromotionStock = buyProductResult.getTotalQuantity() - getProductForNormalStock;
         product.minusNormalStock(getProductForNormalStock);
         product.minusPromotionStock(getProductForPromotionStock);
+    }
+
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 }

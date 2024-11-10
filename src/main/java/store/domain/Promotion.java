@@ -50,6 +50,13 @@ public class Promotion {
             throw CustomException.of(ErrorMessage.INVALID_DATE);
         }
     }
+    public boolean isActive() {
+        LocalDateTime now = DateTimes.now();
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
+        return !now.isBefore(startDateTime) && !now.isAfter(endDateTime);
+    }
+
 
     private boolean isEmptyOrBlank(String str) {
         return str == null || str.isBlank();
@@ -86,12 +93,5 @@ public class Promotion {
 
     public LocalDate getEndDate() {
         return endDate;
-    }
-
-    public boolean isActive() {
-        LocalDateTime now = DateTimes.now();
-        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
-        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
-        return !now.isBefore(startDateTime) && !now.isAfter(endDateTime);
     }
 }

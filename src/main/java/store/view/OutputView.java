@@ -18,6 +18,17 @@ public class OutputView {
         System.out.println();
     }
 
+    public void printBuyProductsResult(BuyProductsResult buyProductsResult) {
+        System.out.println("==============W 편의점================");
+        System.out.println("상품명 수량 금액");
+        printBuyProduct(buyProductsResult);
+        System.out.println("=============증정===============");
+        printBuyProductFree(buyProductsResult);
+        System.out.println("====================================");
+        printResult(buyProductsResult);
+        System.out.println();
+    }
+
     private void printProduct(Product product) {
         if (product.hasPromotion()) {
             printPromotionProduct(product);
@@ -51,17 +62,6 @@ public class OutputView {
             return "재고 없음";
         }
         return quantity + "개";
-    }
-
-    public void printBuyProductsResult(BuyProductsResult buyProductsResult) {
-        System.out.println("==============W 편의점================");
-        System.out.println("상품명 수량 금액");
-        printBuyProduct(buyProductsResult);
-        System.out.println("=============증정===============");
-        printBuyProductFree(buyProductsResult);
-        System.out.println("====================================");
-        printResult(buyProductsResult);
-        System.out.println();
     }
 
     private void printBuyProduct(BuyProductsResult buyProductsResult) {
