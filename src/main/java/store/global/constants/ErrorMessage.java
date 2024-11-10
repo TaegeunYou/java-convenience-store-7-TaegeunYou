@@ -8,7 +8,8 @@ public enum ErrorMessage {
     EMPTY_NOT_ALLOWED("해당 값이 없거나 공백일 수 없습니다"),
     BLANK_NOT_ALLOWED("해당 값이 공백일 수 없습니다"),
     INVALID_NUMBER("해당 값은 양의 정수여야 합니다."),
-    INVALID_DATE("해당 값은 날짜 형식이여야 합니다.");
+    INVALID_DATE("해당 값은 날짜 형식이여야 합니다."),
+    INVALID_BUY_PRODUCT("구매할 상품 형식이 올바르지 않습니다.");
 
     private final static String PREFIX = "[ERROR]";
     private final String message;
