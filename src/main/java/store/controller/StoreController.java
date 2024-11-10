@@ -40,6 +40,6 @@ public class StoreController {
 
         outputView.printProducts(products);
 
-        List<BuyProductDto> buyProducts = inputView.requestBuyProducts();
+        List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
     }
 }

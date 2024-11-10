@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import store.domain.Products;
 import store.dto.BuyProductDto;
 import store.global.constants.ErrorMessage;
 import store.global.constants.InputMessage;
@@ -15,11 +16,12 @@ public class InputView {
     private static final String BUY_PRODUCT_FORMAT_REGEX = "\\[(\\p{L}+)-(\\d+)](,\\[(\\p{L}+)-(\\d+)])*";
     private static final String BUY_PRODUCT_PARSE_FORMAT_REGEX = "\\[(\\p{L}+)-(\\d+)]";
 
-    public List<BuyProductDto> requestBuyProducts() {
+    public List<BuyProductDto> requestBuyProducts(Products products) {
         while (true) {
             System.out.println(InputMessage.INPUT_BUY_PRODUCT.getMessage());
             try {
                 List<BuyProductDto> buyProducts = enterBuyProduct();
+                products.validateBuyProduct(buyProducts);
                 System.out.println();
                 return buyProducts;
             } catch (CustomException e) {

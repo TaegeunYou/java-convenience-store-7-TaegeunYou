@@ -1,5 +1,6 @@
 package store.domain;
 
+import store.dto.BuyProductDto;
 import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
 import store.global.file.dto.ProductFileDto;
@@ -16,6 +17,16 @@ public class Product {
         this.price = Integer.parseInt(productFileDto.price());
         this.quantity = Integer.parseInt(productFileDto.quantity());
         this.promotion = productFileDto.promotion();
+    }
+
+    public boolean isSame(BuyProductDto buyProducts) {
+        return name.equals(buyProducts.name());
+    }
+
+    public void validateStock(BuyProductDto buyProducts) {
+        if (this.quantity < buyProducts.quantity()) {
+            throw CustomException.of(ErrorMessage.STOCK_LIMIT_EXCEEDED);
+        }
     }
 
     private void validate(ProductFileDto productFileDto) {
