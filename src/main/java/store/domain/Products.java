@@ -24,17 +24,29 @@ public class Products {
         this.products = products;
     }
 
-    public List<Product> getProducts() {
-        return Collections.unmodifiableList(products);
-    }
-
     public void validateBuyProduct(List<BuyProductDto> buyProducts) {
         for (BuyProductDto buyProduct : buyProducts) {
-            Product matchedProduct = products.stream()
-                    .filter(product -> product.isSame(buyProduct))
-                    .findFirst()
-                    .orElseThrow(() -> CustomException.of(ErrorMessage.PRODUCT_NOT_FOUND));
-            matchedProduct.validateStock(buyProduct);
+            List<Product> matchedProducts = products.stream()
+                    .filter(product -> product.isSame(buyProduct)).toList();
+            validateProductFound(matchedProducts);
+            validateStock(matchedProducts, buyProduct);
         }
+    }
+
+    private void validateProductFound(List<Product> matchedProducts) {
+        if (matchedProducts.isEmpty()) {
+            throw CustomException.of(ErrorMessage.PRODUCT_NOT_FOUND);
+        }
+    }
+
+    private void validateStock(List<Product> matchedProducts, BuyProductDto buyProduct) {
+        int stock = matchedProducts.stream().mapToInt(Product::getQuantity).sum();
+        if (stock < buyProduct.quantity()) {
+            throw CustomException.of(ErrorMessage.STOCK_LIMIT_EXCEEDED);
+        }
+    }
+
+    public List<Product> getProducts() {
+        return Collections.unmodifiableList(products);
     }
 }

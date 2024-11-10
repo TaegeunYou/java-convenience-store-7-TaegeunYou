@@ -27,12 +27,6 @@ public class Product {
         return name.equals(buyProducts.name());
     }
 
-    public void validateStock(BuyProductDto buyProducts) {
-        if (this.quantity < buyProducts.quantity()) {
-            throw CustomException.of(ErrorMessage.STOCK_LIMIT_EXCEEDED);
-        }
-    }
-
     private void validate(ProductFileDto productFileDto) {
         validateEmpty(productFileDto.name());
         validateNumber(productFileDto.price());
