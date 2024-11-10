@@ -67,14 +67,14 @@ public class Products {
         for (BuyProductDto buyProduct : buyProducts) {
             List<Product> matchedProducts = products.stream()
                     .filter(product -> product.isSame(buyProduct)).toList();
-            validateProductFound(matchedProducts);
+            validateProductExist(matchedProducts);
             validateStock(matchedProducts, buyProduct);
         }
     }
 
-    private void validateProductFound(List<Product> matchedProducts) {
+    private void validateProductExist(List<Product> matchedProducts) {
         if (matchedProducts.isEmpty()) {
-            throw CustomException.of(ErrorMessage.PRODUCT_NOT_FOUND);
+            throw CustomException.of(ErrorMessage.PRODUCT_NOT_EXIST);
         }
     }
 
