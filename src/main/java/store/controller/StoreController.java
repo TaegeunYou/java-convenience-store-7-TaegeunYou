@@ -39,8 +39,8 @@ public class StoreController {
 
         while (true) {
             outputView.printProducts(products);
-            List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
-            BuyProductsResult buyProductsResult = buy(products, buyProducts);
+            List<BuyProductDto> buyProductDtos = inputView.requestBuyProducts(products);
+            BuyProductsResult buyProductsResult = buyProducts(products, buyProductDtos);
             buyProductsResult.applyMembership(inputView.requestMembership());
             outputView.printBuyProductsResult(buyProductsResult);
             if (!inputView.requestAdditionalBuy()) {
@@ -49,7 +49,7 @@ public class StoreController {
         }
     }
 
-    private BuyProductsResult buy(Products products, List<BuyProductDto> buyProductDtos) {
+    private BuyProductsResult buyProducts(Products products, List<BuyProductDto> buyProductDtos) {
         BuyProductsResult buyProductsResult = products.buyProducts(buyProductDtos);
         buyProductsResult = applyPromotionQuantitySufficient(buyProductsResult);
         buyProductsResult = determinePartialPromotion(buyProductsResult);
