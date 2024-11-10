@@ -1,11 +1,21 @@
 package store.domain;
 
 import java.util.List;
+import store.global.constants.ErrorMessage;
+import store.global.exception.CustomException;
 import store.global.file.dto.PromotionFileDto;
 
 public class Promotions {
-    List<Promotion> promotions;
+    private List<Promotion> promotions;
+
     public Promotions(List<PromotionFileDto> promotionFileDtos) {
         this.promotions = promotionFileDtos.stream().map(Promotion::new).toList();
+    }
+
+    public Promotion findPromotionByName(String promotionName) {
+        return promotions.stream()
+                .filter(promotion -> promotion.getName().equals(promotionName))
+                .findFirst()
+                .orElse(null);
     }
 }

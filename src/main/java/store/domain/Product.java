@@ -9,14 +9,18 @@ public class Product {
     private final String name;
     private final int price;
     private final int quantity;
-    private final String promotion;
+    private final Promotion promotion;
 
     public Product(ProductFileDto productFileDto) {
+        this(productFileDto, null);
+    }
+
+    public Product(ProductFileDto productFileDto, Promotion promotion) {
         validate(productFileDto);
         this.name = productFileDto.name();
         this.price = Integer.parseInt(productFileDto.price());
         this.quantity = Integer.parseInt(productFileDto.quantity());
-        this.promotion = productFileDto.promotion();
+        this.promotion = promotion;
     }
 
     public boolean isSame(BuyProductDto buyProducts) {
@@ -81,7 +85,7 @@ public class Product {
         return quantity;
     }
 
-    public String getPromotion() {
+    public Promotion getPromotion() {
         return promotion;
     }
 }

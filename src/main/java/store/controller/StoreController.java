@@ -1,6 +1,7 @@
 package store.controller;
 
 import java.util.List;
+import store.domain.BuyProducts;
 import store.domain.Products;
 import store.domain.Promotions;
 import store.dto.BuyProductDto;
@@ -34,9 +35,9 @@ public class StoreController {
 
     public void execute() {
         List<ProductFileDto> productDtos = readProductFile.getProductDtos(FilePath.PRODUCTS.getPath());
-        Products products = new Products(productDtos);
         List<PromotionFileDto> promotionsDtos = readPromotionFile.getPromotionsDtos(FilePath.PROMOTIONS.getPath());
         Promotions promotions = new Promotions(promotionsDtos);
+        Products products = new Products(productDtos, promotions);
 
         outputView.printProducts(products);
 

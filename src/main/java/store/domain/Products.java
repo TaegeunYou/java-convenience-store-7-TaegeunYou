@@ -1,5 +1,6 @@
 package store.domain;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import store.dto.BuyProductDto;
@@ -10,8 +11,17 @@ import store.global.file.dto.ProductFileDto;
 public class Products {
     List<Product> products;
 
-    public Products(List<ProductFileDto> productFileDtos) {
-        this.products = productFileDtos.stream().map(Product::new).toList();
+    public Products(List<ProductFileDto> productFileDtos, Promotions promotions) {
+        List<Product> products = new ArrayList<>();
+        for (ProductFileDto productDto : productFileDtos) {
+            Promotion promotion = promotions.findPromotionByName(productDto.promotion());
+            if (promotion != null) {
+                products.add(new Product(productDto, promotion));
+                continue;
+            }
+            products.add(new Product(productDto));
+        }
+        this.products = products;
     }
 
     public List<Product> getProducts() {

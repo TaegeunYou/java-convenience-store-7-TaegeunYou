@@ -27,7 +27,7 @@ public class OutputView {
                     product.getName(),
                     String.format("%,d", product.getPrice()),
                     getProductQuantityPrintFormat(product.getQuantity()),
-                    getProductPromotionPrintFormat(product.getPromotion())
+                    getProductPromotionPrintFormat(product.getPromotion().getName())
             );
             System.out.println(str);
         }
