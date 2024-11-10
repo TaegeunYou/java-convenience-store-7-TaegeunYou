@@ -43,6 +43,9 @@ public class StoreController {
             BuyProductsResult buyProductsResult = buy(products, buyProducts);
             buyProductsResult.applyMembership(inputView.requestMembership());
             outputView.printBuyProductsResult(buyProductsResult);
+            if (!inputView.requestAdditionalBuy()) {
+                break;
+            }
         }
     }
 

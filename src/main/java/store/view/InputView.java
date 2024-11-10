@@ -81,6 +81,19 @@ public class InputView {
         }
     }
 
+    public boolean requestAdditionalBuy() {
+        while (true) {
+            System.out.println(InputMessage.INPUT_ADDITIONAL_BUY.getMessage());
+            try {
+                boolean isAdditionalBuy = enterAdditionalBuy();
+                System.out.println();
+                return isAdditionalBuy;
+            } catch (CustomException e) {
+                System.out.println(e.getMessage() + "\n");
+            }
+        }
+    }
+
     private List<BuyProductDto> enterBuyProduct() {
         String input = Console.readLine();
         validateStringFormat(input);
@@ -91,21 +104,28 @@ public class InputView {
     private boolean enterPromotionQuantitySufficient() {
         String input = Console.readLine();
         validateStringFormat(input);
-        validateMemberShipFormat(input);
+        validateYesNoFormat(input);
         return parseYesNo(input);
     }
 
     private boolean enterDetermineFullBuy() {
         String input = Console.readLine();
         validateStringFormat(input);
-        validateMemberShipFormat(input);
+        validateYesNoFormat(input);
         return parseYesNo(input);
     }
 
     private boolean enterMemberShip() {
         String input = Console.readLine();
         validateStringFormat(input);
-        validateMemberShipFormat(input);
+        validateYesNoFormat(input);
+        return parseYesNo(input);
+    }
+
+    private boolean enterAdditionalBuy() {
+        String input = Console.readLine();
+        validateStringFormat(input);
+        validateYesNoFormat(input);
         return parseYesNo(input);
     }
 
@@ -113,7 +133,7 @@ public class InputView {
         return input.equals(INPUT_TRUE_FORMAT);
     }
 
-    private void validateMemberShipFormat(String input) {
+    private void validateYesNoFormat(String input) {
         if (!input.equals(INPUT_TRUE_FORMAT) && !input.equals(INPUT_FALSE_FORMAT)) {
             throw CustomException.of(ErrorMessage.INVALID_YES_NO_FORMAT);
         }
