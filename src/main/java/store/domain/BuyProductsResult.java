@@ -21,6 +21,9 @@ public class BuyProductsResult {
     }
 
     public int getMembershipDiscountPrice() {
+        if (!hasMembership) {
+            return 0;
+        }
         int totalPrice = 0;
         for (BuyProductResult buyProductResult : buyProductResults) {
             int quantity = buyProductResult.getTotalQuantity() - buyProductResult.getPromotionBenefitQuantity();
