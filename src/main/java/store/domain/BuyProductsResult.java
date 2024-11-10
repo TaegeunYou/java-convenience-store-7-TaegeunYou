@@ -24,14 +24,19 @@ public class BuyProductsResult {
         if (!hasMembership) {
             return 0;
         }
+        int totalPrice = calculateTotalPriceWithoutPromotionBenefits();
+        int discountPrice = totalPrice * MEMBERSHIP_DISCOUNT_PERCENTAGE / 100;
+        return Math.min(discountPrice, MAX_MEMBERSHIP_DISCOUNT_PRICE);
+    }
+
+    private int calculateTotalPriceWithoutPromotionBenefits() {
         int totalPrice = 0;
         for (BuyProductResult buyProductResult : buyProductResults) {
             int quantity = buyProductResult.getTotalQuantity() - buyProductResult.getPromotionBenefitQuantity();
             int price = buyProductResult.getProduct().getPrice() * quantity;
             totalPrice += price;
         }
-        int discountPrice = totalPrice * MEMBERSHIP_DISCOUNT_PERCENTAGE / 100;
-        return Math.min(discountPrice, MAX_MEMBERSHIP_DISCOUNT_PRICE);
+        return totalPrice;
     }
 
     public int getTotalPrice() {
