@@ -1,13 +1,10 @@
 package store.controller;
 
 import java.util.List;
-import store.domain.BuyProducts;
 import store.domain.Products;
 import store.domain.Promotions;
 import store.dto.BuyProductDto;
 import store.global.constants.FilePath;
-import store.global.constants.InputMessage;
-import store.global.exception.CustomException;
 import store.global.file.ReadProductFile;
 import store.global.file.ReadPromotionFile;
 import store.global.file.dto.ProductFileDto;
@@ -22,10 +19,8 @@ public class StoreController {
     private final OutputView outputView;
 
     public StoreController(
-            ReadProductFile readProductFile,
-            ReadPromotionFile readPromotionFile,
-            InputView inputView,
-            OutputView outputView
+            ReadProductFile readProductFile, ReadPromotionFile readPromotionFile,
+            InputView inputView, OutputView outputView
     ) {
         this.readProductFile = readProductFile;
         this.readPromotionFile = readPromotionFile;
@@ -39,8 +34,15 @@ public class StoreController {
         Promotions promotions = new Promotions(promotionsDtos);
         Products products = new Products(productDtos, promotions);
 
-        outputView.printProducts(products);
+        while (true) {
+            outputView.printProducts(products);
 
-        List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
+            List<BuyProductDto> buyProducts = inputView.requestBuyProducts(products);
+            buy(products, buyProducts);
+        }
+    }
+
+    private void buy(Products products, List<BuyProductDto> buyProductDtos) {
+        products.buyProducts(buyProductDtos);
     }
 }

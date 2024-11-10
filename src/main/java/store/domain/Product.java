@@ -8,9 +8,9 @@ import store.global.file.dto.ProductFileDto;
 public class Product {
     private final String name;
     private final int price;
-    private final int normalQuantity;
+    private int normalQuantity;
     private final Promotion promotion;
-    private final int promotionQuantity;
+    private int promotionQuantity;
 
     public Product(ProductFileDto normalProductDto) {
         validate(normalProductDto);
@@ -102,5 +102,22 @@ public class Product {
 
     public int getPromotionQuantity() {
         return promotionQuantity;
+    }
+
+    public boolean hasPromotion() {
+        return promotion != null;
+    }
+
+    public boolean hasActivePromotion() {
+        return hasPromotion() && promotion.isActive();
+    }
+
+
+    public void minusPromotionStock(int promotionQuantity) {
+        this.promotionQuantity -= promotionQuantity;
+    }
+
+    public void minusNormalStock(int normalQuantity) {
+        this.normalQuantity -= normalQuantity;
     }
 }

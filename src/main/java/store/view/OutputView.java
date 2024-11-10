@@ -29,7 +29,7 @@ public class OutputView {
     }
 
     private void printProduct(Product product) {
-        if (product.getPromotion() != null) {
+        if (product.hasPromotion()) {
             printPromotionProduct(product);
         }
         printNormalProduct(product);

@@ -1,6 +1,9 @@
 package store.domain;
 
+import camp.nextstep.edu.missionutils.DateTimes;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import store.global.constants.ErrorMessage;
 import store.global.exception.CustomException;
@@ -83,5 +86,12 @@ public class Promotion {
 
     public LocalDate getEndDate() {
         return endDate;
+    }
+
+    public boolean isActive() {
+        LocalDateTime now = DateTimes.now();
+        LocalDateTime startDateTime = LocalDateTime.of(startDate, LocalTime.MIN);
+        LocalDateTime endDateTime = LocalDateTime.of(endDate, LocalTime.MIN);
+        return !now.isBefore(startDateTime) && !now.isAfter(endDateTime);
     }
 }
