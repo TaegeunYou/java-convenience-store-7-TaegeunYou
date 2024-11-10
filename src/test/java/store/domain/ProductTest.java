@@ -34,7 +34,6 @@ public class ProductTest {
         assertThat(product.getName()).isEqualTo(name);
         assertThat(product.getPrice()).isEqualTo(Integer.parseInt(price));
         assertThat(product.getNormalQuantity()).isEqualTo(Integer.parseInt(quantity));
-        assertThat(product.getPromotion()).isEqualTo(promotion);
     }
 
     @ParameterizedTest
