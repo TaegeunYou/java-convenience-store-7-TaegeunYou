@@ -19,7 +19,7 @@ class ReadFileTest {
         List<String> allLines = readProductFile.getAllLines(FilePath.PRODUCTS.getPath());
 
         // then
-        Assertions.assertThat(allLines.getFirst()).isEqualTo("name,price,quantity,promotion");
-        Assertions.assertThat(allLines.size()).isEqualTo(17);
+        Assertions.assertThat(allLines.getFirst()).isEqualTo("콜라,1000,10,탄산2+1");
+        Assertions.assertThat(allLines.size()).isEqualTo(16);
     }
 }
