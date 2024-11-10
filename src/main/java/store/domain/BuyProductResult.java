@@ -42,7 +42,6 @@ public class BuyProductResult {
         return getProductForPromotionStock;
     }
 
-    //프로모션_재고중에_공짜인거
     public int getForFree() {
         if (!product.hasActivePromotion()) {
             return 0;
@@ -50,12 +49,10 @@ public class BuyProductResult {
         return getProductForPromotionStock / (promotion.getBuy() + promotion.getGet());
     }
 
-    //차감하고_남은_프로모션_재고
     public int getRemainPromotionStock() {
         return product.getPromotionQuantity() - getProductForPromotionStock;
     }
 
-    //프로모션_재고에서_해택_받고_가져온거
     public int getPromotionBenefitQuantity() {
         if (!product.hasActivePromotion()) {
             return 0;
@@ -63,12 +60,10 @@ public class BuyProductResult {
         return getForFree() * (promotion.getBuy() + promotion.getGet());
     }
 
-    //프로모션_해택받지_않는_개수
     public int getNonBenefitQuantity() {
         return totalQuantity - getPromotionBenefitQuantity();
     }
 
-    //일반_재고에서_가져올거
     public int getProductForNormalStock() {
         return totalQuantity - getProductForPromotionStock;
     }
@@ -85,8 +80,7 @@ public class BuyProductResult {
         if (isPromotionSufficient) {
             int getMoreQuantity = getPromotion().getGet();
             return new BuyProductResult(
-                    this,
-                    getProductForPromotionStock() + getMoreQuantity,
+                    this, getProductForPromotionStock() + getMoreQuantity,
                     getTotalQuantity() + getMoreQuantity
             );
         }
@@ -96,9 +90,7 @@ public class BuyProductResult {
     public BuyProductResult applyPartialPromotion(boolean isFullBuy) {
         if (!isFullBuy) {
             return new BuyProductResult(
-                    this,
-                    getPromotionBenefitQuantity(),
-                    getPromotionBenefitQuantity()
+                    this, getPromotionBenefitQuantity(), getPromotionBenefitQuantity()
             );
         }
         return this;
