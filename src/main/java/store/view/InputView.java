@@ -13,8 +13,8 @@ import store.global.constants.InputMessage;
 import store.global.exception.CustomException;
 
 public class InputView {
-    private static final String BUY_PRODUCT_FORMAT_REGEX = "\\[(\\p{L}+)-(\\d+)](,\\[(\\p{L}+)-(\\d+)])*";
-    private static final String BUY_PRODUCT_PARSE_FORMAT_REGEX = "\\[(\\p{L}+)-(\\d+)]";
+    private static final String BUY_PRODUCT_FORMAT_REGEX = "^(\\[[\\p{L}a-zA-Z0-9]+-\\d+])(,(\\[[\\p{L}a-zA-Z0-9]+-\\d+]))*$";
+    private static final String BUY_PRODUCT_PARSE_FORMAT_REGEX = "\\[([\\p{L}a-zA-Z0-9]+)-(\\d+)]";
 
     public List<BuyProductDto> requestBuyProducts(Products products) {
         while (true) {
