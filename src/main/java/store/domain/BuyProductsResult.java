@@ -1,5 +1,6 @@
 package store.domain;
 
+import java.util.Collections;
 import java.util.List;
 
 public class BuyProductsResult {
@@ -13,7 +14,7 @@ public class BuyProductsResult {
     }
 
     public List<BuyProductResult> getBuyProducts() {
-        return buyProductResults;
+        return Collections.unmodifiableList(buyProductResults);
     }
 
     public void applyMembership(boolean isMemberShipDiscountApply) {
